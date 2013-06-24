@@ -79,7 +79,7 @@ cdef class NitroFrame(object):
 
     def __str__(self):
         return ('<<%s>> with %d bytes' %
-            (self.__class__.__name__, 
+            (self.__class__.__name__,
             len(self.data)))
 
     cdef sendto(self, nitro_socket_t *s, int flags, int *res):
@@ -207,13 +207,8 @@ cdef class NitroSocket(object):
 
         o.sendto(self.socket, cflags, &e)
 
-        if e < 0:
-            e = nitro_error()
-            if e == _NITRO_EAGAIN:
-                raise NitroFull()
-
-            error = nitro_errmsg(e)
-            raise NitroError(error)
+      	if e == _NITRO_EAGAIN:
+           raise NitroFull()
 
     def reply(self, NitroFrame snd, NitroFrame o, flags=None):
         cdef int cflags
@@ -245,13 +240,8 @@ cdef class NitroSocket(object):
 
         o.relayfwto(snd.frame, self.socket, cflags, &e)
 
-        if e < 0:
-            e = nitro_error()
-            if e == _NITRO_EAGAIN:
-                raise NitroFull()
-
-            error = nitro_errmsg(e)
-            raise NitroError(error)
+      	if e == _NITRO_EAGAIN:
+           raise NitroFull()
 
     def relay_bk(self, NitroFrame snd, NitroFrame o, flags=None):
         cdef int cflags
